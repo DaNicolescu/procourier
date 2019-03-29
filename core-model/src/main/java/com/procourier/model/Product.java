@@ -1,26 +1,40 @@
 package com.procourier.model;
 
-import java.util.Objects;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-public final class Product {
+import static java.util.Objects.requireNonNull;
+
+@Entity
+@Table(name = "products")
+public class Product {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private Long price;
     private String name;
     private String description;
     private Long weight;
 
+    public Product() {
+    }
+
     public Product(Long price, String name, String description, Long weight) {
-        this.price = Objects.requireNonNull(price);
-        this.name = Objects.requireNonNull(name);
-        this.description = Objects.requireNonNull(description);
+        this.price = requireNonNull(price);
+        this.name = requireNonNull(name);
+        this.description = requireNonNull(description);
         this.weight = checkWeight(weight);
     }
 
     private static Long checkWeight(Long weight) {
         if (weight <= 0) {
-            throw new IllegalArgumentException("weight must be non negative");
+            throw new IllegalArgumentException("Weight must be non negative");
         }
 
-        return Objects.requireNonNull(weight);
+        return requireNonNull(weight);
     }
 
     public Long getPrice() {
@@ -37,5 +51,15 @@ public final class Product {
 
     public Long getWeight() {
         return weight;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "price=" + price +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", weight=" + weight +
+                '}';
     }
 }
